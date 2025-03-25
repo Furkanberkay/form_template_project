@@ -1,30 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("contactForm");
-    
+
     if (!form) return;
 
     form.addEventListener("submit", function (e) {
-        e.preventDefault(); // Formun kendi kendine sayfa yenilemesini engeller
+        e.preventDefault();
 
-        const formData = new FormData(form); // Tüm input, textarea verilerini alır
+        const formData = new FormData(form);
 
-        // Veriyi fetch ile PHP'ye gönderiyoruz
-        fetch("public/php/process-form.php", {
+        fetch("http://localhost/form_template_project/form_template/public/php/process-form.php", {
             method: "POST",
             body: formData
         })
-        .then(response => response.json()) // PHP'den JSON dönerse yakalarız
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
                 Swal.fire("Başarılı!", data.message, "success");
-                form.reset(); // Formu temizle
+                form.reset();
             } else {
                 Swal.fire("Hata!", data.message, "error");
             }
         })
         .catch(error => {
-            console.error("Hata oluştu:", error);
-            Swal.fire("Hata!", "Bir hata oluştu, lütfen tekrar deneyin.", "error");
+            console.error("Hata:", error);
+            Swal.fire("Hata!", "Bir sorun oluştu!", "error");
         });
     });
 });
